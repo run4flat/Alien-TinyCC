@@ -3,6 +3,7 @@
 ########################################################################
 
 use parent 'My::Build';
+File::Copy::Recursive qw( rcopy_glob );
 
 sub ACTION_code {
 	my $self = shift;

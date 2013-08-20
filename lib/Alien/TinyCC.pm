@@ -4,6 +4,18 @@ package Alien::TinyCC;
 our $VERSION = "0.01";
 $VERSION = eval $VERSION;
 
+use File::ShareDir;
+
+# Modifies PATH environment variable to include tcc's directory
+sub prepare_path {
+	return File::ShareDir::dist_dir('Alien-TinyCC') . '/stuff';
+}
+
+# prefix
+# version
+# libs
+# include/cflags?
+
 1;
 
 __END__
