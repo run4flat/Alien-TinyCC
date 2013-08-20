@@ -1,9 +1,11 @@
-########################################################################
+﻿########################################################################
                    package My::Build::Windows;
 ########################################################################
 
+use strict;
+use warnings;
 use parent 'My::Build';
-File::Copy::Recursive qw( rcopy_glob );
+use File::Copy::Recursive;
 
 sub my_code {
 	my $self = shift;
@@ -14,7 +16,9 @@ sub my_code {
 	chdir '..\\..';
 	
 	# Copy the files to the distribution's share dir
-	rcopy_glob('src\\win32\\*' => 'share\\');
+	File::Copy::Recursive::rcopy_glob('src\\win32\\*' => 'share\\');
 }
+
+sub my_clean {}
 
 1;
