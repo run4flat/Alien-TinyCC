@@ -30,4 +30,5 @@ $class->new(
 	requires => {
 		'File::ShareDir' => 0,
 	},
+	needs_compiler => 1,
 )->create_build_script;

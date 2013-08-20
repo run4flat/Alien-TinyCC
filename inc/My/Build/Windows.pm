@@ -5,7 +5,7 @@
 use parent 'My::Build';
 File::Copy::Recursive qw( rcopy_glob );
 
-sub ACTION_code {
+sub my_code {
 	my $self = shift;
 	
 	# move into the source directory and invoke the custom Windows build
@@ -15,8 +15,6 @@ sub ACTION_code {
 	
 	# Copy the files to the distribution's share dir
 	rcopy_glob('src\\win32\\*' => 'share\\');
-	
-	$self->SUPER::ACTION_code;
 }
 
 1;
