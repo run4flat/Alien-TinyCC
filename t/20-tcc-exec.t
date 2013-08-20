@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test::More;
-use inc::My::TestSetup;
 
 use Alien::TinyCC;
 
@@ -22,9 +21,13 @@ END {
 	unlink 'test.c';
 }
 
-my $include = join(' ', Alien::TinyCC->include_paths);
-print "About to include $include\n";
-my $results = `tcc $include -run test.c`;
+my $results = Alien::TinyCC->qx_tcc('-run test.c');
 ok($?, 'tcc was able to run');
 is($results, 'Good to go', 'tcc compiled the code correctly')
-	or diag("tcc printed $results");
+	or diag(join("\n", "tcc printed [$results]",
+		"tcc configuration:",
+		scalar(`tcc -print-search-dirs`),
+		"ld_library_path is $ENV{LD_LIBRARY_PATH}",
+	));
+
+done_testing;

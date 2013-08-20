@@ -11,24 +11,30 @@ my $class = $^O =~ /MSWin/   ? 'My::Build::Windows'
 
 (my $module_file = "$class.pm") =~ s/::/\//g;
 require $module_file;
+# Explicitly use the sharedir and require File::Copy::Recursive only if we're on
+# Windows. Properly using the sharedir as the prefix on Linux requires a direct
+# make install (which does not require said module).
+my @sharedir_args = (share_dir => 'share') if $^O =~ /MSWin/;
+my @build_requires = ('File::Copy::Recursive' => 0) if $^O =~ /MSWin/;
 $class->new(
 	module_name => 'Alien::TinyCC',
 	dist_abstract => 'Ensure the Tiny C Compiler is installed on your system',
 	dist_author => 'David Mertens <dcmertens.perl@gmail.com>',
 	license => 'perl',
-	share_dir => 'share',
+	@sharedir_args,
 	configure_requires => {
 		'Module::Build' => 0,
+		'File::ShareDir' => 0,
 	},
 	build_requires => {
 		'Module::Build' => 0,
-		'Test::File::ShareDir' => 0,
 		'ExtUtils::CBuilder' => 0,
-		# only really needed for Windows, but I'm lazy at the moment
-		'File::Copy::Recursive' => 0,
+		@build_requires,
+		'File::ShareDir' => 0,
 	},
 	requires => {
 		'File::ShareDir' => 0,
 	},
 	needs_compiler => 1,
+	dynamic_config => 1,
 )->create_build_script;

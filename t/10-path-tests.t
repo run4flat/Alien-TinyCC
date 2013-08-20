@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test::More;
-use inc::My::TestSetup;
 
 use Alien::TinyCC;
 my $found = 0;
