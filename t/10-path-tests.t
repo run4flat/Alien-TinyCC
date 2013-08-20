@@ -4,9 +4,11 @@ use Test::More;
 use inc::My::TestSetup;
 
 use Alien::TinyCC;
-ok(-f Alien::TinyCC->include_path . '/libtcc.h',
-	'libtcc.h is in the given include path')
-		or diag('include path is ' . Alien::TinyCC->include_path);
+my $found = 0;
+-f "$_/libtcc.h" and $found = 1 foreach (Alien::TinyCC->include_paths);
+
+ok($found, 'libtcc.h is in the given include path')
+	or diag('include paths are [' . join('], [', Alien::TinyCC->include_paths) . ']');
 
 if ($^O !~ /MSWin/) {
 	ok((grep -f, glob(Alien::TinyCC->ld_library_path . '/libtcc.*')),
