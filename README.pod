@@ -24,6 +24,7 @@ repository. Thus on your command line, you should say something like this:
 
  git clone https://github.com/run4flat/Alien-TinyCC.git
  cd Alien-TinyCC
+ git submodule init
  git submodule update
 
 =head1 LICENSE, COPYRIGHT
