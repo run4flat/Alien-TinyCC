@@ -22,7 +22,9 @@ END {
 	unlink 'test.c';
 }
 
-my $results = `tcc -run test.c`;
+my $include = join(' ', Alien::TinyCC->include_paths);
+print "About to include $include\n";
+my $results = `tcc $include -run test.c`;
 ok($?, 'tcc was able to run');
 is($results, 'Good to go', 'tcc compiled the code correctly')
 	or diag("tcc printed $results");

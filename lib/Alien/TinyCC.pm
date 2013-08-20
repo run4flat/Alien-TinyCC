@@ -27,13 +27,24 @@ unshift @LD_LIBRARY_PATH, ld_library_path unless $^O =~ /MSWin/;
 
 # version
 
-sub include_path {
+sub include_paths {
 	if ($^O =~ /MSWin/) {
 		return File::Spec->catdir($dist_dir, 'libtcc');
 	}
-	return File::Spec->catdir($dist_dir, 'include');
+	return (
+		File::Spec->catdir($dist_dir, 'include'),
+		File::Spec->catdir($dist_dir, 'lib', 'tcc', 'include'),
+	);
 }
 
+sub run_tcc {
+	my ($class, @args) = @_;
+	# TCC is in the path and the linker stuff should be set up either by
+	# setting the path (Windows) or ld_library_path (everything else).
+	# I just need to set up the includes directory:
+	my @includes = map { "-I$_" } include_paths;
+	system('tcc', @includes, @args);
+}
 1;
 
 __END__
