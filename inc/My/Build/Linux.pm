@@ -2,6 +2,8 @@
                     package My::Build::Linux;
 ########################################################################
 
+use strict;
+use warnings;
 use parent 'My::Build';
 
 # We don't need any extra args for pure Linux builds, but this may be
@@ -18,7 +20,7 @@ sub my_code {
 	
 	# normal incantation
 	my $extra_args = $self->extra_config_args;
-	system('./configure --prefix=../share $extra_args');
+	system("./configure --prefix=../share $extra_args");
 	system('make');
 	system('make install');
 	
