@@ -23,7 +23,7 @@ unshift @PATH, path_to_tcc();
 sub ld_library_path {
 	return File::Spec->catdir($dist_dir, 'lib');
 }
-unshift @LD_LIBRARY_PATH, ld_library_path;
+unshift @LD_LIBRARY_PATH, ld_library_path unless $^O =~ /MSWin/;
 
 # version
 
