@@ -36,7 +36,7 @@ sub patch_build_tcc_bat {
 	chmod 0700 $filename;
 	
 	open my $in_fh, '<', $filename;
-	open my $out_fh, '>', "$filname.new";
+	open my $out_fh, '>', "$filename.new";
 	LINE: while (my $line = <$in_fh>) {
 		# Eat the two lines that talk about PROCESSOR_ARCH and replace them
 		if ($line =~ /PROCESSOR_ARCH/) {
