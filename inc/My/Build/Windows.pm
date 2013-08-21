@@ -43,7 +43,7 @@ sub patch_build_tcc_bat {
 			# Eat next line, too
 			<$in_fh>;
 			print $out_fh <<'EOF';
-@FOR /F "delims=" %%i IN ('perl -MConfig -e "$_=$Config{archname}; m/^MSWin32-(.*?)-/; print $1"') DO set TMP_PERLARCH=%%i}
+@FOR /F "delims=" %%i IN ('perl -MConfig -e "$_=$Config{archname}; m/^MSWin32-(.*?)-/; print $1"') DO set TMP_PERLARCH=%%i
 @if %TMP_PERLARCH%==x64 goto x86_64
 EOF
 			next LINE;
