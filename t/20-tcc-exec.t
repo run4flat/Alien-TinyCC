@@ -11,7 +11,7 @@ print $out_fh <<'EOF';
 
 int main() {
 	printf("Good to go");
-	return 1;
+	return 0;
 }
 
 EOF
@@ -21,13 +21,11 @@ END {
 	unlink 'test.c';
 }
 
-my $results = Alien::TinyCC->qx_tcc('-run test.c');
-ok($?, 'tcc was able to run');
+my $results = `tcc -run test.c`;
 is($results, 'Good to go', 'tcc compiled the code correctly')
 	or diag(join("\n", "tcc printed [$results]",
 		"tcc configuration:",
 		scalar(`tcc -print-search-dirs`),
-		"ld_library_path is $ENV{LD_LIBRARY_PATH}",
 	));
 
 done_testing;
