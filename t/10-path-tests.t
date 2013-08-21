@@ -18,7 +18,7 @@ ok(-f Alien::TinyCC->libtcc_library_path . "/libtcc$extension",
 
 my $exec = 'tcc';
 $exec .= '.exe' if $^O =~ /MSWin/;
-ok(-f Alien::TinyCC->path_to_tcc . "/tcc$extension",
+ok(-f Alien::TinyCC->path_to_tcc . "/$exec",
 	"$exec is in the given path")
 		or diag('path to tcc is [' . Alien::TinyCC->path_to_tcc . ']');
 
