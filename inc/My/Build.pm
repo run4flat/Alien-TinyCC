@@ -17,6 +17,7 @@ sub ACTION_clean {
 	my $self = shift;
 	
 	File::Path::remove_tree('share');
+	$self->notes('build_state', '');
 	
 	# Call system-specific cleanup code
 	$self->my_clean;
