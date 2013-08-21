@@ -33,7 +33,7 @@ sub patch_build_tcc_bat {
 	# Assumes we're already in src\win32
 	my $filename = 'build-tcc.bat';
 	# make the file read-write
-	chmod 0700 $filename;
+	chmod 0700, $filename;
 	
 	open my $in_fh, '<', $filename;
 	open my $out_fh, '>', "$filename.new";
