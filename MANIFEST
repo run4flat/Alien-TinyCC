@@ -49,10 +49,7 @@ src/README
 src/RELICENSING
 src/stab.def
 src/stab.h
-src/tcc-doc.html
-src/tcc-doc.info
 src/tcc-doc.texi
-src/tcc.1
 src/tcc.c
 src/tcc.h
 src/tccasm.c
