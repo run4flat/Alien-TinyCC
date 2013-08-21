@@ -13,7 +13,7 @@ my @test_files = grep {
 my (@expected_to_fail, $todo_message);
 if ($^O =~ /darwin/) {
 	$todo_message = 'Known to fail on Mac';
-	push @expected_to_fail, qr/40_stdio/, qr/32_stdio/;
+	push @expected_to_fail, qr/40_stdio/, qr/32_led/;
 }
 if ($^O =~ /MSWin/) {
 	$todo_message = 'Known to fail on Windows';
