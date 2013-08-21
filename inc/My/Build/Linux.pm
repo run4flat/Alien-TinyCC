@@ -14,28 +14,34 @@ sub extra_config_args { '' }
 sub install_to_prefix {
 	my ($self, $prefix) = @_;
 	
+	return if $self->notes('build_state') eq $prefix;
+	
 	# move into the source directory and perform configure, make, and install
 	chdir 'src';
 	
-	# normal incantation
+	# clean followed by a normal incantation
 	my $extra_args = $self->extra_config_args;
+	system('make clean');
 	system("./configure --prefix=$prefix $extra_args");
 	system('make');
 	system('make install');
 	
 	# Move back to the root directory
 	chdir '..';
+	
+	# Record the current build state so we don't build more than necessary.
+	$self->notes('build_state', $prefix);
 }
 
 use Cwd;
-sub my_code {
+sub ACTION_code {
 	my $self = shift;
 	
-	# Build an absolute prefix to our (local) sharedir
+	# Build an absolute prefix to our (local) sharedir, build and install
 	my $prefix = File::Spec->catdir(getcwd(), 'share');
-	
-	# Install to that prefix
 	$self->install_to_prefix($prefix);
+	
+	$self->SUPER::ACTION_code;
 }
 
 sub my_clean {
@@ -49,8 +55,17 @@ sub ACTION_install {
 	my $self = shift;
 	
 	# For unixish systems, we must re-build with the new prefix so that all of
-	# the baked-in paths are correct.
-	my $prefix = File::ShareDir::dist_dir('Alien-TinyCC');
+	# the baked-in paths are correct. I just wanna say this:
+	#my $prefix = File::ShareDir::dist_dir('Alien-TinyCC');
+	# Unfortunately, this won't work because File::ShareDir expects the
+	# folder to already exist.
+	
+	# Instead, I copy code from Alien::Base::ModuleBuild to calculate the
+	# sharedir location by-hand:
+	my $prefix = File::Spec->catdir($self->install_destination('lib'),
+		qw(auto share dist Alien-TinyCC));
+	
+	# Completely rebuild (and install) the compiler with the new prefix
 	File::Path::make_path($prefix);
 	$self->install_to_prefix($prefix);
 	
