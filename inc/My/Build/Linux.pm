@@ -16,12 +16,13 @@ sub install_to_prefix {
 	
 	return if $self->notes('build_state') eq $prefix;
 	
+	my_clean();
+	
 	# move into the source directory and perform configure, make, and install
 	chdir 'src';
 	
 	# clean followed by a normal incantation
 	my $extra_args = $self->extra_config_args;
-	system('make clean');
 	system("./configure --prefix=$prefix $extra_args");
 	system('make');
 	system('make install');
@@ -36,6 +37,7 @@ sub install_to_prefix {
 use Cwd;
 sub ACTION_code {
 	my $self = shift;
+	$self->notes('build_state', '') unless defined $self->notes('build_state');
 	
 	# Build an absolute prefix to our (local) sharedir, build and install
 	my $prefix = File::Spec->catdir(getcwd(), 'share');
@@ -45,6 +47,7 @@ sub ACTION_code {
 }
 
 sub my_clean {
+	return unless -f 'src/config.mak';
 	chdir 'src';
 	system('make clean');
 	chdir '..';

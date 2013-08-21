@@ -19,7 +19,7 @@ use Carp;
 my $dist_dir;
 
 my $mod_path = $INC{'Alien/TinyCC.pm'};
-if ($mod_path =~ s/blib.*/share/) {
+if ($mod_path =~ s/(.*)blib.*/$1share/) {
 	$dist_dir = $mod_path;
 	croak('Looks like Alien::TinyCC is being invoked from blib, but I cannot find build-time sharedir!')
 		unless -d $dist_dir;
