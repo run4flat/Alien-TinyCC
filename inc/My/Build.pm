@@ -12,16 +12,6 @@ sub ACTION_build {
 	$self->SUPER::ACTION_build;
 }
 
-sub ACTION_code {
-	my $self = shift;
-	
-	# Only build if it hasn't built already
-	my @files = glob('share/*');
-	$self->my_code if @files == 0;
-	
-	$self->SUPER::ACTION_code;
-}
-
 use File::Path;
 sub ACTION_clean {
 	my $self = shift;
