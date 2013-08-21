@@ -1,0 +1,15 @@
+Put changes under the appropriate header. Headers can include API CHANGES,
+DIFFERENT BEHAVIOR, BUG FIXES, DEPENDENCIES, ENHANCEMENTS, NEW FEATURES, and
+OTHER. Entries should be in chronological order, i.e. oldest at the top
+
+0.01  Tue, Aug 20, 2013
+
+  Initial release!
+  
+  * Compiles and installs tcc on Windows, Linux, and Mac OSX.
+  
+  * Installs to a sharedir location, and is Perl-specific.
+  
+  * Provides simple mechanisms for use in Build.PL files.
+  
+  * "use Alien::TinyCC" modifies PATH so tcc can be found.
