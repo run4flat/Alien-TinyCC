@@ -14,25 +14,19 @@ use Carp;
 ###################################
 
 # The prefix will depend on whether or not the thing was finally installed.
-# Let's assume it was, and if not (i.e. during testing before the install), we
-# can take more drastic measures
+# The easiest way to know that is if *this* *module* *file* is in a blib
+# directory or not:
 my $dist_dir;
-eval {
+
+my $mod_path = $INC{'Alien/TinyCC.pm'};
+if ($mod_path =~ s/blib.*/share/) {
+	$dist_dir = $mod_path;
+	croak('Looks like Alien::TinyCC is being invoked from blib, but I cannot find build-time sharedir!')
+		unless -d $dist_dir;
+}
+else {
 	$dist_dir = File::ShareDir::dist_dir('Alien-TinyCC');
-	1;
-} or do {
-	# OK, need to take more drastic measures. Get the directory of THIS module,
-	# and find the share/ dir from that
-	my $mod_path = $INC{'Alien/TinyCC.pm'};
-	if ($mod_path =~ s/blib.*/share/) {
-		$dist_dir = $mod_path;
-		croak('Looks like Alien::TinyCC is being invoked from blib, but I cannot find build-time sharedir!')
-			unless -d $dist_dir;
-	}
-	else {
-		croak('It looks like Alien::TinyCC is installed, but there is no File::ShareDir for it!');
-	}
-};
+}
 
 ############################
 # Path retrieval functions #
@@ -57,10 +51,10 @@ sub libtcc_library_path {
 
 # Add library path on Unixish:
 if ($ENV{LD_LIBRARY_PATH}) {
-	$ENV{LD_LIBRARY_PATH} = ld_library_path() . ':' . $ENV{LD_LIBRARY_PATH};
+	$ENV{LD_LIBRARY_PATH} = libtcc_library_path() . ':' . $ENV{LD_LIBRARY_PATH};
 }
 elsif ($^O !~ /MSWin/) {
-	$ENV{LD_LIBRARY_PATH} = ld_library_path();
+	$ENV{LD_LIBRARY_PATH} = libtcc_library_path();
 }
 
 # Determine path for libtcc.h
