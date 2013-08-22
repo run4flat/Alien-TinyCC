@@ -37,6 +37,9 @@ for my $test_file (@test_files) {
 	# Tweak the output for the args test
 	$output =~ s/src.tests.tests2.// if $test_name =~ /args/;
 	
+	# Remove any generated files
+	unlink 'fred.txt' if $test_name =~ /40_stdio/;
+	
 	# Slurp in the expected results:
 	(my $expected_filename = $test_file) =~ s/\.c/.expect/;
 	-r $expected_filename or fail("For test file $test_file, I could not find a related .expect file!");
