@@ -23,9 +23,12 @@ sub install_to_prefix {
 	
 	# clean followed by a normal incantation
 	my $extra_args = $self->extra_config_args;
-	system("./configure --prefix=$prefix $extra_args");
-	system('make');
-	system('make install');
+	system("./configure --prefix=$prefix $extra_args")
+		and die 'tcc build failed at ./configure';
+	system('make')
+		and die 'tcc build failed at make';
+	system('make install')
+		and die 'tcc build failed at make install';
 	
 	# Move back to the root directory
 	chdir '..';

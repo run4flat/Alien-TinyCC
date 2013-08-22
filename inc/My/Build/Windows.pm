@@ -17,6 +17,9 @@ sub ACTION_code {
 		system('build-tcc.bat');
 		chdir '..\\..';
 		
+		# check if there was a mishap:
+		$ENV{ERRORLEVEL} and die 'build-tcc.bat failed';
+		
 		# Copy the files to the distribution's share dir
 		File::Copy::Recursive::rcopy_glob('src\\win32\\*' => 'share\\');
 		
