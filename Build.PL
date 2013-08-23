@@ -13,11 +13,17 @@ my $class = $^O =~ /MSWin/          ? 'My::Build::Windows'
 
 (my $module_file = "$class.pm") =~ s/::/\//g;
 require $module_file;
+
 # Explicitly use the sharedir and require File::Copy::Recursive only if we're on
 # Windows. Properly using the sharedir as the prefix on Linux requires a direct
 # make install (which does not require said module).
 my @sharedir_args = (share_dir => 'share') if $^O =~ /MSWin/;
 my @build_requires = ('File::Copy::Recursive' => 0) if $^O =~ /MSWin/;
+
+# On Macs, we'll use File::Which to resolve the compiler.
+@build_requires = ('File::Which' => 0) if $^O =~ /darwin/;
+
+# OK, ready to build:
 $class->new(
 	module_name => 'Alien::TinyCC',
 	dist_abstract => 'Ensure the Tiny C Compiler is installed on your system',
