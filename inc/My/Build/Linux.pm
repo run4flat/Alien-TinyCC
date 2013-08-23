@@ -18,7 +18,7 @@ sub install_to_prefix {
 	
 	return if $self->notes('build_state') eq $prefix;
 	
-	my_clean();
+	$self->my_clean;
 	
 	# Get the system-specific make command
 	my $make = $self->make_command;
