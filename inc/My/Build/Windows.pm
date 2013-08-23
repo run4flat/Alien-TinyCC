@@ -5,10 +5,11 @@
 use strict;
 use warnings;
 use parent 'My::Build';
-use File::Copy::Recursive;
 
 sub ACTION_code {
 	my $self = shift;
+	
+	require File::Copy::Recursive;
 	
 	if (not $self->notes('build_state')) {
 		# move into the source directory and invoke the custom Windows build
