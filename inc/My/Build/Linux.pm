@@ -55,6 +55,7 @@ sub ACTION_code {
 }
 
 sub my_clean {
+	my $self = shift;
 	return unless -f 'src/config.mak';
 	
 	# Get the system-specific make command
