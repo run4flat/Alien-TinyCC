@@ -11,12 +11,17 @@ use File::ShareDir;
 # overridden by derived classes
 sub extra_config_args { '' }
 
+sub make_command { 'make' }
+
 sub install_to_prefix {
 	my ($self, $prefix) = @_;
 	
 	return if $self->notes('build_state') eq $prefix;
 	
 	my_clean();
+	
+	# Get the system-specific make command
+	my $make = $self->make_command;
 	
 	# move into the source directory and perform configure, make, and install
 	chdir 'src';
@@ -25,9 +30,9 @@ sub install_to_prefix {
 	my $extra_args = $self->extra_config_args;
 	system("./configure --prefix=$prefix $extra_args")
 		and die 'tcc build failed at ./configure';
-	system('make')
+	system($make)
 		and die 'tcc build failed at make';
-	system('make install')
+	system($make, 'install')
 		and die 'tcc build failed at make install';
 	
 	# Move back to the root directory
@@ -51,8 +56,12 @@ sub ACTION_code {
 
 sub my_clean {
 	return unless -f 'src/config.mak';
+	
+	# Get the system-specific make command
+	my $make = $self->make_command;
+	
 	chdir 'src';
-	system('make clean');
+	system($make, 'clean');
 	chdir '..';
 }
 
