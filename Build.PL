@@ -7,7 +7,7 @@ my $class = $^O =~ /MSWin/          ? 'My::Build::Windows'
            : $^O =~ /Cygwin/        ? 'My::Build::Cygwin'
            : $^O =~ /darwin/        ? 'My::Build::MacOSX'
            : $^O =~ /GNU\/kFreeBSD/ ? 'My::Build::Linux' # Linux build process works for this particular BSD
-           : $^O =~ /BSD/           ? 'My::Build::BSD'   # all other BSDs need slight modification
+           : $^O =~ /BSD/i          ? 'My::Build::BSD'   # all other BSDs need slight modification
            :                          'My::Build::Linux' # default to Linux
            ;
 
