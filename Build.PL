@@ -8,6 +8,7 @@ my $class = $^O =~ /MSWin/          ? 'My::Build::Windows'
            : $^O =~ /darwin/        ? 'My::Build::MacOSX'
            : $^O =~ /GNU\/kFreeBSD/ ? 'My::Build::Linux' # Linux build process works for this particular BSD
            : $^O =~ /BSD/           ? 'My::Build::BSD'   # all other BSDs need slight modification
+           : $^O eq 'freebsd'       ? 'My::Build::FreeBSD'
            :                          'My::Build::Linux' # default to Linux
            ;
 
