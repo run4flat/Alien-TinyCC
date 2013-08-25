@@ -5,6 +5,7 @@ inc/My/Build/Cygwin.pm
 inc/My/Build/Linux.pm
 inc/My/Build/MacOSX.pm
 inc/My/Build/Windows.pm
+inc/My/Build/BSD.pm
 lib/Alien/TinyCC.pm
 MANIFEST			This list of files
 README.pod
