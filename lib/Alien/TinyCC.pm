@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 # Follow Golden's Version Rule: http://www.dagolden.com/index.php/369/version-numbers-should-be-boring/
-our $VERSION = "0.02_06";
+our $VERSION = "0.03";
 $VERSION = eval $VERSION;
 
 use File::ShareDir;
