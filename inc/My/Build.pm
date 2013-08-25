@@ -2,6 +2,8 @@
                        package My::Build;
 ########################################################################
 
+use strict;
+use warnings;
 use parent 'Module::Build';
 
 sub ACTION_build {
