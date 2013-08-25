@@ -36,6 +36,9 @@ sub install_to_prefix {
                 if ($ENV{$varname} =~ s/-march=native//) {
                     print "Scrubbing -march=native from $varname\n";
                 }
+                if ($ENV{$varname} =~ s/-fassociative-math//) {
+                    print "Scrubbing -fassociative-math from $varname\n";
+                }
             }
         }
     }
