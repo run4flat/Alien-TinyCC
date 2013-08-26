@@ -45,4 +45,13 @@ $class->new(
 	},
 	needs_compiler => 1,
 	dynamic_config => 1,
+	meta_merge => {
+		resources  => {
+			repository => "http://github.com/run4flat/Alien-TinyCC",
+			bugtracker => "http://github.com/run4flat/Alien-TinyCC/issues",
+		},
+		no_index => {
+			file      => [ 'README.pod' ],
+		},
+	},
 )->create_build_script;
