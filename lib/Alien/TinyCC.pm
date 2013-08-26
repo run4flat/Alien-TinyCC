@@ -274,7 +274,7 @@ had the Windows install command nicely packaged up! How amazing!
 
 =head1 LICENSE AND COPYRIGHT
 
-Code copyright 201 Dickinson College. Documentation copyright 2013 David
+Code copyright 2013 Dickinson College. Documentation copyright 2013 David
 Mertens.
 
 Everything not contained in the F<src/> directory is free software, the
