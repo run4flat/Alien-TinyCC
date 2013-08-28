@@ -18,7 +18,7 @@ if ($touched_files !~ /Changes/) {
 	open STDIN, '<', '/dev/tty';
 	my $response = <>;
 	
-	$to_return = 0 if $response eq 'y';
+	$to_return = 0 if $response =~ 'y';
 }
 
 # Restore the stash and return the result
