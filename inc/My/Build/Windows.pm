@@ -14,7 +14,6 @@ sub ACTION_code {
 	if (not $self->notes('build_state')) {
 		# move into the source directory and invoke the custom Windows build
 		chdir 'src\\win32';
-		patch_build_tcc_bat();
 		system('build-tcc.bat');
 		chdir '..\\..';
 		
