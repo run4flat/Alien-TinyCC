@@ -26,6 +26,12 @@ sub install_to_prefix {
 	# move into the source directory and perform configure, make, and install
 	chdir 'src';
 	
+	# Add -fPIC if it's in our Perl Config's ccflags
+	use Config;
+	$ENV{CFLAGS} = '' unless $ENV{CFLAGS};  # Avoid undef warnings
+	$ENV{CFLAGS} .= ' -fPIC'
+		if $Config{ccflags} =~ /-fPIC/ and $ENV{CFLAGS} !~ /-fPIC/;
+	
 	# clean followed by a normal incantation
 	my $extra_args = $self->extra_config_args;
 	system("./configure --prefix=$prefix $extra_args")
