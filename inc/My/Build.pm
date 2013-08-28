@@ -28,4 +28,29 @@ sub ACTION_clean {
 	$self->SUPER::ACTION_clean;
 }
 
+sub apply_patches {
+	my ($filename, @patches) = @_;
+	
+	# make the file read-write
+	chmod 0700, $filename;
+	
+	open my $in_fh, '<', $filename;
+	open my $out_fh, '>', "$filename.new";
+	LINE: while (my $line = <$in_fh>) {
+		# Apply each basic test regex, and call the function if it matches
+		for (my $i = 0; $i < @patches; $i += 2) {
+			if ($line =~ $patches[$i]) {
+				my $next_line = $patches[$i+1]->($in_fh, $out_fh, $line);
+				next LINE if $next_line;
+			}
+		}
+		print $out_fh $line;
+	}
+	
+	close $in_fh;
+	close $out_fh;
+	unlink $filename;
+	rename "$filename.new" => $filename;
+}
+
 1;

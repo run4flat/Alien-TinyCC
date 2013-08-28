@@ -33,36 +33,55 @@ sub ACTION_code {
 
 sub my_clean {}
 
-sub patch_build_tcc_bat {
-	# Assumes we're already in src\win32
-	my $filename = 'build-tcc.bat';
-	# make the file read-write
-	chmod 0700, $filename;
-	
-	open my $in_fh, '<', $filename;
-	open my $out_fh, '>', "$filename.new";
-	LINE: while (my $line = <$in_fh>) {
-		# Eat the two lines that talk about PROCESSOR_ARCH and replace them
-		if ($line =~ /PROCESSOR_ARCH/) {
-			# Eat next line, too
-			<$in_fh>;
-			print $out_fh <<'EOF';
-@FOR /F "delims=" %%i IN ('perl -MConfig -e "$_=$Config{archname}; m/^MSWin32-(.*?)-/; print $1"') DO set TMP_PERLARCH=%%i
-@if %TMP_PERLARCH%==x64 goto x86_64
-EOF
-			next LINE;
+# Figure out if this is a 64-bit system:
+use Config;
+my $is_64_bit = ($Config{archname} =~ /^MSWin32-(.*?)-/ and $1 eq 'x64');
+
+# Patch the build batch file
+My::Build::apply_patches('src\\win32\\build-tcc.bat',
+	# Special-casing for 32 or 64 bit processors is just better handled by
+	# modifications based on Perl-side config data. This one handles identifying
+	# 64-bit builds.
+	qr/goto x86_64/ => sub {
+		# Found the line that's supposed to jump ahead to :x86_64 if we have a
+		# 64-bit architecture. Let's either get rid of these, for 32 bit systems,
+		# or get rid of the 32-bit stuff for 64-bit systems.
+		my ($in_fh, $out_fh, $line) = @_;
+		
+		# Chew through the not-great 64-bit detection checks
+		$line = <$in_fh>;
+		$line = <$in_fh> while $line =~ /goto x86_64/;
+		
+		# If we are 64-bit, chew through everything until we get to the goto
+		# label. Then skip to the next line.
+		if ($is_64_bit) {
+			$line = <$in_fh> until $line =~ /:x86_64/;
 		}
-		if ($line =~ /\@set CC=x86_64/) {
-			print $out_fh "\@set CC=gcc -O0 -s -fno-strict-aliasing\n";
-			next LINE;
+		else {
+			print $out_fh $line;
 		}
+		
+		# All done; skip to next line
+		return 1;
+	},
+	qr/:x86_64/ => sub {
+		my ($in_fh, $out_fh, $line) = @_;
+		# We can only have detected this label if it was not eaten by the
+		# 64-bit detection code. Remove this and everything up to the tools
+		# label
+		die "64 bit machines shouldn't have :x86_64 label after preprocessing!"
+			if $is_64_bit;
+		$line = <$in_fh> until $line =~ /:tools/;
 		print $out_fh $line;
-	}
-	
-	close $in_fh;
-	close $out_fh;
-	unlink $filename;
-	rename "$filename.new" => $filename;
-}
+		return 1;
+	},
+	qr/\@set CC=/ => sub {
+		my ($in_fh, $out_fh, $line) = @_;
+		# Replace the compiler name with the one used by Perl itself:
+		$line =~ s/CC=\S+/CC=$Config{cc}/;
+		print $out_fh $line;
+		return 1;
+	},
+);
 
 1;
