@@ -4,6 +4,9 @@ use Test::More;
 
 use Alien::TinyCC;
 
+# Needed for quick patching
+use inc::My::Build;
+
 # These test files don't work, according to tcc's own test suite Makefile
 my @test_files = grep {
 	not (m/30_hanoi/ or m/34_array_assignment/ or m/46_grep/)
@@ -25,6 +28,20 @@ if ($^O =~ /MSWin/) {
 for my $test_file (@test_files) {
 	# Build a legible test description
 	(my $test_name = $test_file) =~ s/src.tests.tests2./tcc test /;
+	
+	# Patch the sources so they pass with older gcc compilers
+	my $is_patched = 0;
+	My::Build::apply_patches($test_file =>
+		qr/#include\s+<stdarg.h>/ => sub {
+			$is_patched++;
+			return 0;
+		},
+		qr/#include\s+<stdio.h>/ => sub {
+			my ($in_fh, $out_fh, $line) = @_;
+			print $out_fh "#include <stdarg.h>\n" unless $is_patched;
+			return 0;
+		},
+	);
 	
 	# Add arguments to the invocation of the args test (duh!);
 	my $args = '';
