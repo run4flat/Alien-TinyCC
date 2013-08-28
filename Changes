@@ -4,6 +4,19 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
 
 0.04  DDD, MMM ##, 2013
 
+  [ENHANCEMENTS]
+  
+  * Created a general patching function, used now by Windows and BSD build
+    systems, and used to patch the test files.
+  
+  [BUG FIXES]
+  
+  * Patched MidnightBSD detection.
+  
+  * Added -fPIC flag for systems whose Perl was compiled with it.
+  
+  * Fixed stdarg.h issues for older gcc header collections.
+
 0.03  Sun, Aug 25, 2013
 
   [ENHANCEMENTS]
