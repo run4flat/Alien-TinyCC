@@ -16,6 +16,11 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
   * Added -fPIC flag for systems whose Perl was compiled with it.
   
   * Fixed stdarg.h issues for older gcc header collections.
+  
+  [OTHER]
+  
+  * Added a commit hook (and instructions in the README for activation) which
+    should help keep this file up-to-date. :-)
 
 0.03  Sun, Aug 25, 2013
 

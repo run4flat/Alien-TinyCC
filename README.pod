@@ -27,6 +27,15 @@ repository. Thus on your command line, you should say something like this:
  git submodule init
  git submodule update
 
+Since I have a hard time keeping the F<Changes> file up-to-date, I wrote a git
+pre-commit hook that checks that I updated the Changes file and double-checks
+with me in case I did not. This hook is included in the repo. To enable it in 
+your clone, just copy the hook to your F<.git/hooks/> directory like so:
+
+ # Optional; helps keep the Changes file up-to-date
+ cp git-commit-hook.pl .git/hooks/pre-commit    # Unixen
+ copy git-commit-hook.pl .git/hooks/pre-commit  # Windows
+
 =head1 LICENSE, COPYRIGHT
 
 This distribution distributes the source for the Tiny C Compiler project
