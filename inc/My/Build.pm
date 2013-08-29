@@ -33,7 +33,7 @@ use File::Spec;
 sub ACTION_devsetup {
 	my $self = shift;
 	system qw(git submodule init);
-	system qw(git sumodule update);
+	system qw(git submodule update);
 	copy 'git-pre-commit-hook.pl'
 		=> File::Spec->catfile(qw<.git hooks pre-commit>);
 }

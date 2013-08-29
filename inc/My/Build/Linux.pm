@@ -112,20 +112,22 @@ sub try_include_file {
 
 # Now patch tcc.h for the proper ucontext location. Put the detection code
 # inside the patch snippet so that the tests only run once.
-My::Build::apply_patches('src/tcc.h',
-	qr{#include <sys/ucontext\.h>} => sub {
-		my ($in_fh, $out_fh, $line) = @_;
-
-		# Find the proper include location for ucontext.h
-		my $ucontext_include = try_include_file('ucontext.h')
-			|| try_include_file('sys/ucontext.h')
-			|| die "Unable to locate ucontext!";
-		# Clean up after compilation tests.
-		unlink 'a.out';
-		
-		print $out_fh "#include <$ucontext_include>\n";
-		return 1;
-	},
-);
+if (-f 'src/tcc.h') {
+	My::Build::apply_patches('src/tcc.h',
+		qr{#include <sys/ucontext\.h>} => sub {
+			my ($in_fh, $out_fh, $line) = @_;
+	
+			# Find the proper include location for ucontext.h
+			my $ucontext_include = try_include_file('ucontext.h')
+				|| try_include_file('sys/ucontext.h')
+				|| die "Unable to locate ucontext!";
+			# Clean up after compilation tests.
+			unlink 'a.out';
+			
+			print $out_fh "#include <$ucontext_include>\n";
+			return 1;
+		},
+	);
+}
 
 1;
