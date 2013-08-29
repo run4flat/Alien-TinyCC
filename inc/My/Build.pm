@@ -24,8 +24,18 @@ sub ACTION_clean {
 	# Call system-specific cleanup code
 	$self->my_clean;
 	
-	# Call base-class code
+	# Call base class code
 	$self->SUPER::ACTION_clean;
+}
+
+use File::Copy;
+use File::Spec;
+sub ACTION_devsetup {
+	my $self = shift;
+	system qw(git submodule init);
+	system qw(git sumodule update);
+	copy 'git-pre-commit-hook.pl'
+		=> File::Spec->catfile(qw<.git hooks pre-commit>);
 }
 
 # This one's an author action, so I assume they have git and have properly

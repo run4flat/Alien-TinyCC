@@ -18,23 +18,20 @@ On Windows, you should omit the C<./> part of the C<Build> commands.
 
 =head1 DEVELOPMENT
 
-If you want to work on Alien::TCC itself, be sure to not only clone the
-repository but also clone the F<src/> directory, i.e. the tcc source
-repository. Thus on your command line, you should say something like this:
+If you want to work on Alien::TCC itself, you will need to work with a clone of
+this repository, as well as a clone of the tinycc subrepository. To set
+everything up, create a F<Build> file and run the C<devsetup> command:
 
- git clone https://github.com/run4flat/Alien-TinyCC.git
- cd Alien-TinyCC
+ perl Build.PL
+ ./Build devsetup
+
+The C<devsetup> command is essentially equivalent to
+
  git submodule init
  git submodule update
+ cp git-pre-commit-hook.pl .git/hooks/pre-commit
 
-Since I have a hard time keeping the F<Changes> file up-to-date, I wrote a git
-pre-commit hook that checks that I updated the Changes file and double-checks
-with me in case I did not. This hook is included in the repo. To enable it in 
-your clone, just copy the hook to your F<.git/hooks/> directory like so:
-
- # Optional; helps keep the Changes file up-to-date
- cp git-pre-commit-hook.pl .git/hooks/pre-commit    # Unixen
- copy git-pre-commit-hook.pl .git\hooks\pre-commit  # Windows
+The last bit, the commit hook, helps me keep the Changes file up-to-date. :-)
 
 =head1 LICENSE, COPYRIGHT
 

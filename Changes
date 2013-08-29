@@ -27,6 +27,9 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
   
   * Updated the dist Build command to reset the files under src/ before
     building the dist.
+  
+  * Added devsetup Build command to make it easier for contributors to get
+    started.
 
 0.03  Sun, Aug 25, 2013
 
