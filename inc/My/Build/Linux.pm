@@ -100,7 +100,7 @@ sub ACTION_install {
 use File::Temp qw/ tempfile /;
 use Config;
 
-# Test for ucontext.h vs sys/ucontext.h
+# Header file test
 sub try_include_file {
 	my $lib_name = shift;
 	my ($out_fh, $out_filename) = tempfile(UNLINK => 1, SUFFIX => '.c');
@@ -110,17 +110,22 @@ sub try_include_file {
 	return system("$Config{cc} $out_filename") == 0 ? $lib_name : undef;
 }
 
-my $ucontext_include = try_include_file('ucontext.h')
-	|| try_include_file('sys/ucontext.h')
-	|| die "Unable to locate ucontext!";
-
-# Now patch tcc.h for the proper ucontext location
+# Now patch tcc.h for the proper ucontext location. Put the detection code
+# inside the patch snippet so that the tests only run once.
 My::Build::apply_patches('src/tcc.h',
 	qr{#include <sys/ucontext\.h>} => sub {
 		my ($in_fh, $out_fh, $line) = @_;
-		print $out_fh "#include <ucontext.h>\n";
+
+		# Find the proper include location for ucontext.h
+		my $ucontext_include = try_include_file('ucontext.h')
+			|| try_include_file('sys/ucontext.h')
+			|| die "Unable to locate ucontext!";
+		# Clean up after compilation tests.
+		unlink 'a.out';
+		
+		print $out_fh "#include <$ucontext_include>\n";
 		return 1;
 	},
-) if $ucontext_include eq 'ucontext.h';
+);
 
 1;
