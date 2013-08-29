@@ -34,8 +34,9 @@ sub ACTION_devsetup {
 	my $self = shift;
 	system qw(git submodule init);
 	system qw(git submodule update);
-	copy 'git-pre-commit-hook.pl'
-		=> File::Spec->catfile(qw<.git hooks pre-commit>);
+	my $hook_filename = File::Spec->catfile(qw<.git hooks pre-commit>);
+	copy 'git-pre-commit-hook.pl' => $hook_filename;
+	chmod 0755, $hook_filename;
 }
 
 # This one's an author action, so I assume they have git and have properly
