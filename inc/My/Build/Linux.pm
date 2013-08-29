@@ -103,8 +103,8 @@ use Config;
 # Test for ucontext.h vs sys/ucontext.h
 sub try_include_file {
 	my $lib_name = shift;
-	my ($out_fh, $out_filename) = tempfile(UNLINK => 1);
-	print $out_fh "#include <$lib_name>\n";
+	my ($out_fh, $out_filename) = tempfile(UNLINK => 1, SUFFIX => '.c');
+	print $out_fh "#include <$lib_name>\nint main() { return 1;}";
 	close $out_fh;
 	print "Testing for ucontext as $lib_name...\n";
 	return system("$Config{cc} $out_filename") == 0 ? $lib_name : undef;
@@ -115,7 +115,7 @@ my $ucontext_include = try_include_file('ucontext.h')
 	|| die "Unable to locate ucontext!";
 
 # Now patch tcc.h for the proper ucontext location
-My::Build::apply_patches('src/tcc.h'
+My::Build::apply_patches('src/tcc.h',
 	qr{#include <sys/ucontext\.h>} => sub {
 		my ($in_fh, $out_fh, $line) = @_;
 		print $out_fh "#include <ucontext.h>\n";
