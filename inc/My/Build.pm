@@ -39,19 +39,26 @@ sub ACTION_devsetup {
 	chmod 0755, $hook_filename;
 }
 
+# Reset the tcc source code. This only makes sense if the person has
+# src checked out as a git submodule, but then again, the actions for
+# which this exists are generally considered author actions anyway.
+sub reset_src {
+	chdir 'src';
+	system qw( git reset --hard HEAD );
+	chdir '..';
+}
+
+sub ACTION_devclean {
+	my $self = shift;
+	reset_src;
+	$self->ACTION_clean;
+}
+
 # This one's an author action, so I assume they have git and have properly
 # configured.
 sub ACTION_dist {
 	my $self = shift;
-	
-	# Reset the tcc source code. This only makes sense if the person has
-	# src checked out as a git submodule, but then again, this is an author
-	# action, so that's not an unreasonable expectation.
-	chdir 'src';
-	system qw( git reset --hard HEAD );
-	chdir '..';
-	
-	# Call base class code
+	reset_src;
 	$self->SUPER::ACTION_dist;
 }
 
@@ -61,8 +68,8 @@ sub apply_patches {
 	# make the file read-write
 	chmod 0700, $filename;
 	
-	open my $in_fh, '<', $filename;
-	open my $out_fh, '>', "$filename.new";
+	open my $in_fh, '<', $filename or die "Unable to open $filename for patching!";
+	open my $out_fh, '>', "$filename.new" or die "Unable to open $filename.new for patching!";
 	LINE: while (my $line = <$in_fh>) {
 		# Apply each basic test regex, and call the function if it matches
 		for (my $i = 0; $i < @patches; $i += 2) {

@@ -29,7 +29,8 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
     building the dist.
   
   * Added devsetup Build command to make it easier for contributors to get
-    started.
+    started. Added devclean to help contributors ensure they can get back to
+    a pristine state.
 
 0.03  Sun, Aug 25, 2013
 
