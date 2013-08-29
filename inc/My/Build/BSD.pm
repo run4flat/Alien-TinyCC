@@ -40,7 +40,7 @@ sub try_include_file {
 	print $out_fh "#include <$lib_name>\n";
 	close $out_fh;
 	print "Testing for ucontext as $lib_name...\n";
-	return system($Config{cc}, $out_filename) == 0 ? $lib_name : undef;
+	return system("$Config{cc} $out_filename") == 0 ? $lib_name : undef;
 }
 
 my $ucontext_include = try_include_file('ucontext.h')
