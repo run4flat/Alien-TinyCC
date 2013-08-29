@@ -106,7 +106,6 @@ sub try_include_file {
 	my ($out_fh, $out_filename) = tempfile(UNLINK => 1, SUFFIX => '.c');
 	print $out_fh "#include <$lib_name>\nint main() { return 1;}";
 	close $out_fh;
-	print "Testing for ucontext as $lib_name...\n";
 	return system("$Config{cc} $out_filename") == 0 ? $lib_name : undef;
 }
 
@@ -114,7 +113,7 @@ sub try_include_file {
 # inside the patch snippet so that the tests only run once.
 if (-f 'src/tcc.h') {
 	My::Build::apply_patches('src/tcc.h',
-		qr{#include <sys/ucontext\.h>} => sub {
+		qr/#\s*include.*ucontext/ => sub {
 			my ($in_fh, $out_fh, $line) = @_;
 	
 			# Find the proper include location for ucontext.h

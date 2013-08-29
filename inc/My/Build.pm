@@ -54,6 +54,12 @@ sub ACTION_devclean {
 	$self->ACTION_clean;
 }
 
+sub ACTION_devrealclean {
+	my $self = shift;
+	reset_src;
+	$self->ACTION_realclean;
+}
+
 # This one's an author action, so I assume they have git and have properly
 # configured.
 sub ACTION_dist {
@@ -62,14 +68,32 @@ sub ACTION_dist {
 	$self->SUPER::ACTION_dist;
 }
 
+# This one's an author action, so I assume they have git and have properly
+# configured.
+sub ACTION_distdir {
+	my $self = shift;
+	reset_src;
+	$self->SUPER::ACTION_distdir;
+}
+
+# This one's an author action, so I assume they have git and have properly
+# configured.
+sub ACTION_disttest {
+	my $self = shift;
+	reset_src;
+	$self->SUPER::ACTION_disttest;
+}
+
 sub apply_patches {
 	my ($filename, @patches) = @_;
 	
 	# make the file read-write
 	chmod 0700, $filename;
 	
-	open my $in_fh, '<', $filename or die "Unable to open $filename for patching!";
-	open my $out_fh, '>', "$filename.new" or die "Unable to open $filename.new for patching!";
+	open my $in_fh, '<', $filename
+		or die "Unable to open $filename for patching!";
+	open my $out_fh, '>', "$filename.new"
+		or die "Unable to open $filename.new for patching!";
 	LINE: while (my $line = <$in_fh>) {
 		# Apply each basic test regex, and call the function if it matches
 		for (my $i = 0; $i < @patches; $i += 2) {

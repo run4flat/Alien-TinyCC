@@ -33,6 +33,10 @@ The C<devsetup> command is essentially equivalent to
 
 The last bit, the commit hook, helps me keep the Changes file up-to-date. :-)
 
+Also, C<devclean> and C<devrealclean> will restore the contents of F<src/> to 
+their original state, and should be used instead of Build command C<clean> and 
+C<realclean>.
+
 =head1 LICENSE, COPYRIGHT
 
 This distribution distributes the source for the Tiny C Compiler project
