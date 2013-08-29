@@ -7,7 +7,7 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
   [ENHANCEMENTS]
   
   * Created a general patching function, used now by Windows and BSD build
-    systems, and used to patch the test files.
+    systems, and used to patch the test files for all systems.
   
   [BUG FIXES]
   
@@ -16,6 +16,9 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
   * Added -fPIC flag for systems whose Perl was compiled with it.
   
   * Fixed stdarg.h issues for older gcc header collections.
+  
+  * Added method to detect, and patch if necessary, the proper path for
+    ucontext.h (either #include <ucontext.h> or #include <sys/ucontext.h>).
   
   [OTHER]
   
