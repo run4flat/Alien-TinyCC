@@ -28,6 +28,22 @@ sub ACTION_clean {
 	$self->SUPER::ACTION_clean;
 }
 
+# This one's an author action, so I assume they have git and have properly
+# configured.
+sub ACTION_dist {
+	my $self = shift;
+	
+	# Reset the tcc source code. This only makes sense if the person has
+	# src checked out as a git submodule, but then again, this is an author
+	# action, so that's not an unreasonable expectation.
+	chdir 'src';
+	system qw( git reset --hard HEAD );
+	chdir '..';
+	
+	# Call base class code
+	$self->SUPER::ACTION_dist;
+}
+
 sub apply_patches {
 	my ($filename, @patches) = @_;
 	
