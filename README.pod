@@ -34,7 +34,7 @@ your clone, just copy the hook to your F<.git/hooks/> directory like so:
 
  # Optional; helps keep the Changes file up-to-date
  cp git-pre-commit-hook.pl .git/hooks/pre-commit    # Unixen
- copy git-pre-commit-hook.pl .git/hooks/pre-commit  # Windows
+ copy git-pre-commit-hook.pl .git\hooks\pre-commit  # Windows
 
 =head1 LICENSE, COPYRIGHT
 
