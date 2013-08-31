@@ -4,6 +4,12 @@ OTHER. Entries should be in chronological order, i.e. oldest at the top
 
 0.05  DDD, MMM ##, 2013
 
+  [BUG FIXES]
+  
+  * The patch function in the build system now sets execution bit on all new
+    files. This fixes the build issues for BSD boxes, which patch configure,
+    rendering it non-executable.
+  
   [OTHER]
   
   * Added Travis CI integration.

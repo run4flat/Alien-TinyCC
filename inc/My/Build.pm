@@ -87,7 +87,7 @@ sub ACTION_disttest {
 sub apply_patches {
 	my ($filename, @patches) = @_;
 	
-	# make the file read-write
+	# make the file read-write (and executable, but that doesn't matter)
 	chmod 0700, $filename;
 	
 	open my $in_fh, '<', $filename
@@ -109,6 +109,9 @@ sub apply_patches {
 	close $out_fh;
 	unlink $filename;
 	rename "$filename.new" => $filename;
+	
+	# make sure it's executable; we may be patching ./configure
+	chmod 0700, $filename;
 }
 
 1;
