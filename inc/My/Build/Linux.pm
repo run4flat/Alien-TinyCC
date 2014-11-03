@@ -31,6 +31,8 @@ sub install_to_prefix {
 	$ENV{CFLAGS} = '' unless $ENV{CFLAGS};  # Avoid undef warnings
 	$ENV{CFLAGS} .= ' -fPIC'
 		if $Config{cccdlflags} =~ /-fPIC/ and $ENV{CFLAGS} !~ /-fPIC/;
+	$ENV{CFLAGS} .= ' -fpic'
+		if $Config{cccdlflags} =~ /-fpic/ and $ENV{CFLAGS} !~ /-fpic/;
 	
 	# clean followed by a normal incantation
 	my $extra_args = $self->extra_config_args;
