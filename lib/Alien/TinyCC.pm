@@ -4,13 +4,14 @@ use strict;
 use warnings;
 
 # Follow Golden's Version Rule: http://www.dagolden.com/index.php/369/version-numbers-should-be-boring/
-our $VERSION = "0.05_01";
+our $VERSION = "0.06";
 $VERSION = eval $VERSION;
 
 use File::ShareDir;
 use File::Spec;
 use Env qw( @PATH );
 use Carp;
+use Config;
 
 ###################################
 # Find the Distribution Directory #
@@ -72,6 +73,20 @@ sub libtcc_include_path {
 
 sub MB_linker_flags {
 	return ('-L' . libtcc_library_path, '-ltcc');
+}
+
+#################################
+# ExtUtils::MakeMaker Functions #
+#################################
+
+sub EUMM_LIBS {
+	return (LIBS => ['-L' . libtcc_library_path . '\libtcc -ltcc']) if $^O =~ /MSWin/;
+	return;
+}
+
+sub EUMM_OBJECT {
+	return OBJECT => '$(O_FILES)' if $^O =~ /MSWin/;
+	return OBJECT => '$(O_FILES) ' . File::Spec->catdir(libtcc_library_path, 'libtcc'.$Config{lib_ext}),
 }
 
 # version
