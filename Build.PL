@@ -2,10 +2,11 @@ use strict;
 use warnings;
 use lib 'inc';
 
-#            if OS is...      class is...
-my $class = $^O =~ /MSWin/            ? 'My::Build::Windows'
+#            if OS is...              class is...
+my $class  = $^O =~ /MSWin/           ? 'My::Build::Windows'
            : $^O =~ /Cygwin/          ? 'My::Build::Cygwin'
            : $^O =~ /darwin/          ? 'My::Build::MacOSX'
+           : $^) =~ /solaris/i        ? 'My::Build::Solaris'
            : $^O =~ /GNU\/?kFreeBSD/i ? 'My::Build::Linux' # Linux build process works for this particular BSD
            : $^O =~ /BSD/i            ? 'My::Build::BSD'   # all other BSDs need slight modification
            :                            'My::Build::Linux' # default to Linux
