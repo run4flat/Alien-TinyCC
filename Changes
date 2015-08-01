@@ -2,6 +2,14 @@ Put changes under the appropriate header. Headers can include API CHANGES,
 DIFFERENT BEHAVIOR, BUG FIXES, DEPENDENCIES, ENHANCEMENTS, NEW FEATURES, and
 OTHER. Entries should be in chronological order, i.e. oldest at the top
 
+0.07  DAY, MTH D, YYYY
+
+  [ENHANCEMENTS]
+  
+  * New and improved patching for Mac and NetBSD
+  
+  * Added tentative support for Solaris
+
 0.06  Sat, Aug 1, 2015
 
   [ENHANCEMENTS]
