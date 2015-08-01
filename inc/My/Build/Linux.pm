@@ -119,8 +119,8 @@ if (-f 'src/tcc.h') {
 			my ($in_fh, $out_fh, $line) = @_;
 	
 			# Find the proper include location for ucontext.h
-			my $ucontext_include = try_include_file('ucontext.h')
-				|| try_include_file('sys/ucontext.h')
+			my $ucontext_include = try_include_file('sys/ucontext.h')
+				|| try_include_file('ucontext.h')
 				|| die "Unable to locate ucontext!";
 			# Clean up after compilation tests.
 			unlink 'a.out';
