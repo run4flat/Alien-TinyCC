@@ -2,12 +2,13 @@ Put changes under the appropriate header. Headers can include API CHANGES,
 DIFFERENT BEHAVIOR, BUG FIXES, DEPENDENCIES, ENHANCEMENTS, NEW FEATURES, and
 OTHER. Entries should be in chronological order, i.e. oldest at the top
 
-0.06  DAY, MMM ##, 2013
+0.06  Sat, Aug 1, 2015
 
-  [OTHER]
+  [ENHANCEMENTS]
   
-  * The source repository is now my local fork so that I can work on the
-    extended symbol table API.
+  * Include functions to generate ExtUtils::MakeMaker arguments, ported from
+    Alien::TinyCC.
+
 
 0.05  Mon, Sep 2, 2013
 
