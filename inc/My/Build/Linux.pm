@@ -111,9 +111,9 @@ sub try_include_file {
 	return system("$Config{cc} $out_filename") == 0 ? $lib_name : undef;
 }
 
-# Now patch tcc.h for the proper ucontext location. Put the detection code
-# inside the patch snippet so that the tests only run once.
 if (-f 'src/tcc.h') {
+	# Now patch tcc.h for the proper ucontext location. Put the detection
+	# code inside the patch snippet so that the tests only run once.
 	My::Build::apply_patches('src/tcc.h',
 		qr/#\s*include.*ucontext/ => sub {
 			my ($in_fh, $out_fh, $line) = @_;
@@ -126,6 +126,41 @@ if (-f 'src/tcc.h') {
 			unlink 'a.out';
 			
 			print $out_fh "#include <$ucontext_include>\n";
+			return 1;
+		},
+	);
+	
+	# Apply patch to keep NetBSD and Cygwin happy
+	My::Build::apply_patches('src/tccrun.c',
+		qr/uc->uc_mcontext\.mc_r[bi]p;/ => sub {
+			my ($in_fh, $out_fh, $line) = @_;
+			
+			# Keep original code
+			print $out_fh $line;
+			
+			# Apply a few preprocessor if/else lines, too
+			if ($line =~ /paddr/) {
+				print $out_fh <<'PADDR_PATCH';
+#elif defined(__NetBSD__)
+        *paddr = uc->uc_mcontext.__gregs[_REG_RIP];
+#elif defined(__CYGWIN__)
+        *paddr = uc->uc_mcontext.rip;
+PADDR_PATCH
+			}
+			elsif ($line =~ /fp/) {
+				print $out_fh <<'FP_PATCH';
+#elif defined(__NetBSD__)
+        fp = uc->uc_mcontext.__gregs[_REG_RBP];
+#elif defined(__CYGWIN__)
+        fp = uc->uc_mcontext.rbp;
+FP_PATCH
+			}
+			else {
+				die "Unexpected patch line:\n$line";
+			}
+			
+			# patcher does *not* need to include this line, we've
+			# already done that.
 			return 1;
 		},
 	);
