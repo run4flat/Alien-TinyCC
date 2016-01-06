@@ -4,6 +4,10 @@ use Test::More;
 
 use Alien::TinyCC;
 
+# Need '.' on PATH so arg 0 matches expectation in args test
+use Env qw( @PATH );
+push @PATH, '.';
+
 # Needed for quick patching
 use inc::My::Build;
 
@@ -52,7 +56,7 @@ for my $test_file (@test_files) {
 	`tcc $test_file -lm -o .build/$test_bin`;
 
 	# Run the test, clear trailing whitespace
-	my $output = `cd .build && ./$test_bin $args`;
+	my $output = `cd .build && $test_bin $args`;
 	$output =~ s/\s+\n/\n/g;
 	
 	# Tweak the output for the args test
