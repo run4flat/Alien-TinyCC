@@ -1,3 +1,12 @@
+=head1 DISCONTINUED
+
+Work on this git repository has been ported to Alien::TinyCCx, which is
+maintained at
+
+  https://github.com/run4flat/Alien-TinyCCx
+
+Please head over there for more details about this project.
+
 =head1 Alien::TinyCC
 
 A Perl Alien module for the Tiny C Compiler. This Perl distribution
