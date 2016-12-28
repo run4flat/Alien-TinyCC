@@ -2,15 +2,12 @@
 use strict;
 use warnings;
 
-# Stash the unstaged modifications:
-`git stash save --keep-index`;
-
 # Assume good unless we find a problem
 my $to_return = 0;
 
 # Did I remember to touch the Changes file?
-my $touched_files = `git status --porcelain`;
-if ($touched_files !~ /Changes/) {
+my $touched_files = `git status Changes --porcelain`;
+if ($touched_files !~ /^M/) {
 	# Assume bad unless the user overrides
 	$to_return = 1;
 	$|++;
@@ -20,9 +17,5 @@ if ($touched_files !~ /Changes/) {
 	
 	$to_return = 0 if $response =~ 'y';
 }
-
-# Restore the stash and return the result
-`git reset --hard`;
-`git stash pop --index`;
 
 exit($to_return);
