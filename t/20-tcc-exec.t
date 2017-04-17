@@ -28,7 +28,8 @@ END {
 	unlink 'test.c';
 }
 
-my $results = `tcc -run test.c`;
+`tcc test.c -o .build/test`;
+my $results = `.build/test`;
 is($results, 'Good to go', 'tcc compiled the code correctly')
 	or diag(join("\n", "tcc printed [$results]",
 		"tcc configuration:",

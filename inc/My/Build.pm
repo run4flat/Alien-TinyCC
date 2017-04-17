@@ -10,6 +10,7 @@ sub ACTION_build {
 	my $self = shift;
 	
 	mkdir 'share';
+	mkdir '.build';
 	
 	$self->SUPER::ACTION_build;
 }
